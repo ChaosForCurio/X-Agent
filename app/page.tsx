@@ -1,104 +1,141 @@
-import { BentoGrid, BentoGridItem } from "@/components/ui/BentoGrid";
-import { Hero } from "@/components/ui/Hero";
-import { Marquee } from "@/components/ui/Marquee";
-import { Navbar } from "@/components/ui/Navbar";
-import {
-  Code,
-  Terminal,
-  Cpu,
-  Globe,
-  Zap,
-  Shield
-} from "lucide-react";
-import React from "react";
+'use client';
 
-export default function Home() {
-  return (
-    <main className="min-h-screen bg-black/[0.96] antialiased bg-grid-white/[0.02]">
-      <Navbar />
-      <Hero />
+import SmoothScroll from '@/components/SmoothScroll';
+import Hero3D from '@/components/Hero3D';
+import ProjectCard from '@/components/ProjectCard';
+import MagneticButton from '@/components/MagneticButton';
+import CustomCursor from '@/components/CustomCursor';
+import TextReveal from '@/components/TextReveal';
+import Preloader from '@/components/Preloader';
+import InfiniteMarquee from '@/components/InfiniteMarquee';
+import GrainOverlay from '@/components/GrainOverlay';
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-      <section id="about" className="py-20">
-        <h2 className="text-center text-xl font-medium text-neutral-400 mb-8 uppercase tracking-widest">
-          Trusted by Industry Leaders
-        </h2>
-        <Marquee
-          items={["Google", "Microsoft", "Netflix", "Uber", "Airbnb", "Amazon", "Meta", "Apple"]}
-          speed={80}
-        />
-        <div className="h-4" />
-        <Marquee
-          items={["Startup Inc.", "NextGen AI", "FutureTech", "DevOps Pro", "CloudScale", "DataFlow"]}
-          direction="right"
-          speed={80}
-        />
-      </section>
+gsap.registerPlugin(ScrollTrigger);
 
-      <section id="features" className="py-20 max-w-7xl mx-auto px-4 md:px-0">
-        <h2 className="text-3xl md:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50 mb-12">
-          Everything you need <br /> to build agents.
-        </h2>
-        <BentoGrid>
-          {items.map((item, i) => (
-            <BentoGridItem
-              key={i}
-              title={item.title}
-              description={item.description}
-              header={item.header}
-              icon={item.icon}
-              className={i === 3 || i === 6 ? "md:col-span-2" : ""}
-            />
-          ))}
-        </BentoGrid>
-      </section>
-
-      <footer className="py-10 border-t border-neutral-800 text-center text-neutral-500">
-        <p>© {new Date().getFullYear()} X-Agent. All rights reserved.</p>
-      </footer>
-    </main>
-  );
-}
-
-const Skeleton = () => (
-  <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-neutral-900 to-neutral-800 border border-neutral-700/50"></div>
-);
-
-const items = [
+const PROJECTS = [
   {
-    title: "The Agentic Revolution",
-    description: "Build agents that can see, hear, and code along with you.",
-    header: <Skeleton />,
-    icon: <Terminal className="h-4 w-4 text-neutral-500" />,
+    title: 'E-Commerce Reimagined',
+    description: 'A futuristic shopping experience built with Next.js, WebGL, and Stripe integration.',
+    tags: ['Next.js', 'WebGL', 'Stripe'],
+    link: 'https://github.com/visheshnagar7878',
   },
   {
-    title: "Global Infrastructure",
-    description: "Deploy your agents to a global edge network in seconds.",
-    header: <Skeleton />,
-    icon: <Globe className="h-4 w-4 text-neutral-500" />,
+    title: 'AI Dashboard',
+    description: 'Real-time analytics platform powered by machine learning and socket.io.',
+    tags: ['React', 'Python', 'Socket.io'],
+    link: 'https://github.com/visheshnagar7878',
   },
   {
-    title: "Secure by Design",
-    description: "Enterprise-grade security for your mission-critical agents.",
-    header: <Skeleton />,
-    icon: <Shield className="h-4 w-4 text-neutral-500" />,
+    title: 'Portfolio 2025',
+    description: 'Award-winning personal portfolio showcasing creative development skills.',
+    tags: ['Three.js', 'GSAP', 'Tailwind'],
+    link: 'https://github.com/visheshnagar7878',
   },
   {
-    title: "Lightning Fast Inference",
-    description:
-      "Powered by the latest TPUs and GPUs for sub-millisecond latency.",
-    header: <Skeleton />,
-    icon: <Zap className="h-4 w-4 text-neutral-500" />,
-  },
-  {
-    title: "Code Generation",
-    description: "Let the AI write the boilerplate while you focus on the logic.",
-    header: <Skeleton />,
-    icon: <Code className="h-4 w-4 text-neutral-500" />,
-  },
-  {
-    title: "Multi-Model Support",
-    description: "Switch between Gemini, GPT-4, and Claude with a single config.",
-    header: <Skeleton />,
-    icon: <Cpu className="h-4 w-4 text-neutral-500" />,
+    title: 'Social Connect',
+    description: 'Decentralized social media application focused on privacy and ownership.',
+    tags: ['Web3', 'Solidity', 'Next.js'],
+    link: 'https://github.com/visheshnagar7878',
   },
 ];
+
+export default function Home() {
+  const containerRef = useRef(null);
+
+  return (
+    <SmoothScroll>
+      <Preloader />
+      <CustomCursor />
+      <GrainOverlay />
+
+      <main ref={containerRef} className="relative min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-hidden cursor-none font-sans">
+
+        {/* Navigation */}
+        <nav className="fixed top-0 left-0 w-full p-8 flex justify-between items-center z-50 mix-blend-difference">
+          <MagneticButton>
+            <div className="text-xl font-display font-bold tracking-tighter cursor-pointer hover:scale-110 transition-transform">VN.</div>
+          </MagneticButton>
+          <div className="hidden md:flex gap-8 text-sm uppercase tracking-widest opacity-80 font-display">
+            {['Work', 'About', 'Contact'].map((item) => (
+              <MagneticButton key={item}>
+                <a href={`#${item.toLowerCase()}`} className="hover:opacity-100 transition-opacity block px-4 py-2">{item}</a>
+              </MagneticButton>
+            ))}
+          </div>
+        </nav>
+
+        {/* Hero Section */}
+        <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+          <Hero3D /> {/* Background 3D Scene */}
+
+          <div className="relative z-10 text-center px-4 pointer-events-none select-none">
+            <div className="overflow-hidden flex flex-col items-center">
+              <TextReveal className="text-[12vw] leading-[0.85] font-display font-bold tracking-tighter uppercase mix-blend-overlay opacity-90">
+                Creative
+              </TextReveal>
+              <TextReveal className="text-[12vw] leading-[0.85] font-display font-bold tracking-tighter uppercase mix-blend-overlay opacity-90" delay={0.3}>
+                Developer
+              </TextReveal>
+            </div>
+            <div className="mt-8 text-xl md:text-2xl font-light tracking-wide text-white/50 max-w-2xl mx-auto backdrop-blur-sm">
+              <TextReveal delay={0.6}>
+                Creating digital experiences that merge art, code, and interaction.
+              </TextReveal>
+            </div>
+          </div>
+
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.2em] text-white/40 animate-pulse font-display">
+            Scroll to Explore
+          </div>
+        </section>
+
+        {/* Infinite Marquee Strip */}
+        <section className="py-20 bg-black relative z-10 rotate-[-2deg] scale-110">
+          <InfiniteMarquee speed={0.8}>
+            LATEST TRENDS  •  CREATIVE CODING  •  INTERACTIVE DESIGN  •  NEXT.JS POWER
+          </InfiniteMarquee>
+        </section>
+
+        {/* Selected Works Section */}
+        <section id="work" className="relative z-10 px-6 py-32 md:px-20 bg-black">
+          <div className="mb-20 border-b border-white/20 pb-8 flex justify-between items-end">
+            <h2 className="text-6xl md:text-8xl font-display font-light tracking-tighter overflow-hidden">
+              <TextReveal delay={0.2}>Selected Works</TextReveal>
+            </h2>
+            <span className="text-xl md:text-2xl text-white/40 block pb-2 font-display">(04)</span>
+          </div>
+
+          <div className="flex flex-col">
+            {PROJECTS.map((project, index) => (
+              <ProjectCard key={index} index={index} {...project} />
+            ))}
+          </div>
+        </section>
+
+        {/* Footer */}
+        <section id="contact" className="relative z-10 py-32 bg-zinc-950 text-center">
+          <div className="overflow-hidden">
+            <TextReveal className="text-[10vw] font-display font-bold tracking-tighter leading-none text-zinc-900 pointer-events-none select-none">
+              LET'S TALK
+            </TextReveal>
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center z-20">
+            <MagneticButton strength={0.3}>
+              <a href="mailto:hello@example.com" className="text-2xl md:text-4xl font-display hover:underline underline-offset-8 decoration-1 inline-block px-8 py-4 bg-white text-black rounded-full hover:scale-105 transition-transform">
+                Get in touch
+              </a>
+            </MagneticButton>
+          </div>
+          <div className="absolute bottom-8 w-full flex justify-between px-8 text-zinc-600 text-sm uppercase font-display">
+            <span>&copy; 2026 Vishesh Nagar</span>
+            <span>Made by Agentic AI</span>
+          </div>
+        </section>
+
+      </main>
+    </SmoothScroll>
+  );
+}
