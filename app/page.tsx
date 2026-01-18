@@ -1,65 +1,104 @@
-import Image from "next/image";
+import { BentoGrid, BentoGridItem } from "@/components/ui/BentoGrid";
+import { Hero } from "@/components/ui/Hero";
+import { Marquee } from "@/components/ui/Marquee";
+import { Navbar } from "@/components/ui/Navbar";
+import {
+  Code,
+  Terminal,
+  Cpu,
+  Globe,
+  Zap,
+  Shield
+} from "lucide-react";
+import React from "react";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="min-h-screen bg-black/[0.96] antialiased bg-grid-white/[0.02]">
+      <Navbar />
+      <Hero />
+
+      <section id="about" className="py-20">
+        <h2 className="text-center text-xl font-medium text-neutral-400 mb-8 uppercase tracking-widest">
+          Trusted by Industry Leaders
+        </h2>
+        <Marquee
+          items={["Google", "Microsoft", "Netflix", "Uber", "Airbnb", "Amazon", "Meta", "Apple"]}
+          speed={80}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+        <div className="h-4" />
+        <Marquee
+          items={["Startup Inc.", "NextGen AI", "FutureTech", "DevOps Pro", "CloudScale", "DataFlow"]}
+          direction="right"
+          speed={80}
+        />
+      </section>
+
+      <section id="features" className="py-20 max-w-7xl mx-auto px-4 md:px-0">
+        <h2 className="text-3xl md:text-5xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50 mb-12">
+          Everything you need <br /> to build agents.
+        </h2>
+        <BentoGrid>
+          {items.map((item, i) => (
+            <BentoGridItem
+              key={i}
+              title={item.title}
+              description={item.description}
+              header={item.header}
+              icon={item.icon}
+              className={i === 3 || i === 6 ? "md:col-span-2" : ""}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+          ))}
+        </BentoGrid>
+      </section>
+
+      <footer className="py-10 border-t border-neutral-800 text-center text-neutral-500">
+        <p>© {new Date().getFullYear()} X-Agent. All rights reserved.</p>
+      </footer>
+    </main>
   );
 }
+
+const Skeleton = () => (
+  <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-neutral-900 to-neutral-800 border border-neutral-700/50"></div>
+);
+
+const items = [
+  {
+    title: "The Agentic Revolution",
+    description: "Build agents that can see, hear, and code along with you.",
+    header: <Skeleton />,
+    icon: <Terminal className="h-4 w-4 text-neutral-500" />,
+  },
+  {
+    title: "Global Infrastructure",
+    description: "Deploy your agents to a global edge network in seconds.",
+    header: <Skeleton />,
+    icon: <Globe className="h-4 w-4 text-neutral-500" />,
+  },
+  {
+    title: "Secure by Design",
+    description: "Enterprise-grade security for your mission-critical agents.",
+    header: <Skeleton />,
+    icon: <Shield className="h-4 w-4 text-neutral-500" />,
+  },
+  {
+    title: "Lightning Fast Inference",
+    description:
+      "Powered by the latest TPUs and GPUs for sub-millisecond latency.",
+    header: <Skeleton />,
+    icon: <Zap className="h-4 w-4 text-neutral-500" />,
+  },
+  {
+    title: "Code Generation",
+    description: "Let the AI write the boilerplate while you focus on the logic.",
+    header: <Skeleton />,
+    icon: <Code className="h-4 w-4 text-neutral-500" />,
+  },
+  {
+    title: "Multi-Model Support",
+    description: "Switch between Gemini, GPT-4, and Claude with a single config.",
+    header: <Skeleton />,
+    icon: <Cpu className="h-4 w-4 text-neutral-500" />,
+  },
+];
