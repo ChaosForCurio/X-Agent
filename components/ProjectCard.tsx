@@ -1,5 +1,5 @@
 'use client';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
@@ -9,29 +9,31 @@ interface ProjectCardProps {
     title: string;
     description: string;
     link: string;
+    image?: string;
     tags?: string[];
     index: number;
 }
 
-export default function ProjectCard({ title, description, link, tags, index }: ProjectCardProps) {
+export default function ProjectCard({ title, description, link, image, tags, index }: ProjectCardProps) {
     const [isHovered, setIsHovered] = useState(false);
     const imageContainerRef = useRef<HTMLDivElement>(null);
+    const titleRef = useRef<HTMLHeadingElement>(null);
 
-    // Placeholder images for demo purposes - in a real app these would be props
-    const imageUrl = `https://picsum.photos/seed/${index + 1}/600/400`;
+    const imageUrl = image || `https://picsum.photos/seed/${index + 10}/800/500`;
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
             if (!imageContainerRef.current || !isHovered) return;
 
             const { clientX, clientY } = e;
-            // Move the image container near the mouse
-            // We can use gsap.to for smooth follow
+
+            // Smoother magnetic follow with rotation
             gsap.to(imageContainerRef.current, {
                 x: clientX,
                 y: clientY,
-                duration: 0.8,
-                ease: "power3.out"
+                rotate: (clientX - window.innerWidth / 2) * 0.01,
+                duration: 1,
+                ease: "expo.out"
             });
         };
 
@@ -39,56 +41,81 @@ export default function ProjectCard({ title, description, link, tags, index }: P
         return () => window.removeEventListener('mousemove', handleMouseMove);
     }, [isHovered]);
 
+    // Split title into characters
+    const characters = title.split("");
+
     return (
         <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: index * 0.1, ease: 'easeOut' }}
+            initial={{ opacity: 0, borderTopColor: "rgba(255,255,255,0.1)" }}
+            whileInView={{ opacity: 1, borderTopColor: "rgba(255,255,255,0.2)" }}
+            transition={{ duration: 0.8, delay: index * 0.1 }}
             viewport={{ once: true }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="group relative w-full border-t border-white/20 py-12 transition-colors duration-500 cursor-none" // cursor-none because of custom cursor
+            className="group relative w-full border-t py-16 md:py-24 transition-colors duration-700 cursor-none"
         >
-            {/* Floating Image Reveal */}
+            {/* Premium Floating Image Reveal */}
             <div
                 ref={imageContainerRef}
-                className="fixed top-0 left-0 w-[400px] h-[250px] z-50 pointer-events-none rounded-lg overflow-hidden hidden md:block mix-blend-difference"
+                className="fixed top-0 left-0 w-[30vmax] aspect-video z-50 pointer-events-none rounded-xl overflow-hidden hidden md:block"
                 style={{
                     opacity: isHovered ? 1 : 0,
-                    transition: "opacity 0.4s ease",
-                    transform: "translate(-50%, -50%) rotate(-5deg)"
+                    transition: "opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1)",
+                    transform: "translate(-50%, -50%)",
+                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
                 }}
             >
-                <Image
-                    src={imageUrl}
-                    alt={title}
-                    fill
-                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-110 group-hover:scale-100"
-                />
+                <div className="relative w-full h-full overflow-hidden">
+                    <Image
+                        src={imageUrl}
+                        alt={title}
+                        fill
+                        className="object-cover scale-125 group-hover:scale-100 transition-transform duration-[1.5s] ease-out"
+                    />
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-700" />
+                </div>
             </div>
 
-            <Link href={link} target="_blank" className='block space-y-4 px-4 md:px-0 relative z-10'>
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <h3 className="text-4xl md:text-6xl font-light tracking-tighter text-white group-hover:text-gray-400 transition-colors duration-500">
-                        {title}
+            <Link href={link} target="_blank" className="block relative z-10 px-4 md:px-0">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12">
+                    <h3 ref={titleRef} className="text-[8vw] md:text-[6.5vw] font-display font-medium tracking-tighter leading-none flex flex-wrap">
+                        {characters.map((char, i) => (
+                            <motion.span
+                                key={i}
+                                initial={{ y: "100%" }}
+                                whileInView={{ y: 0 }}
+                                transition={{
+                                    duration: 0.8,
+                                    delay: (index * 0.1) + (i * 0.02),
+                                    ease: [0.33, 1, 0.68, 1]
+                                }}
+                                viewport={{ once: true }}
+                                className="inline-block"
+                            >
+                                {char === " " ? "\u00A0" : char}
+                            </motion.span>
+                        ))}
                     </h3>
-                    <div className="flex gap-2 flex-wrap">
+
+                    <div className="flex gap-3 flex-wrap md:mb-4">
                         {tags?.map((tag, i) => (
-                            <span key={i} className="px-3 py-1 text-xs border border-white/20 rounded-full text-white/60 uppercase tracking-widest bg-black/50 backdrop-blur-sm group-hover:bg-white group-hover:text-black transition-colors duration-500">
+                            <span key={i} className="px-5 py-2 text-[10px] border border-white/10 rounded-full text-white/40 uppercase tracking-[0.2em] font-display hover:bg-white hover:text-black hover:border-white transition-all duration-500">
                                 {tag}
                             </span>
                         ))}
                     </div>
                 </div>
 
-                <div className="flex justify-between items-end">
-                    <p className="text-white/60 max-w-xl text-lg font-light leading-relaxed group-hover:text-white transition-colors duration-500">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 overflow-hidden">
+                    <p className="text-white/30 max-w-2xl text-xl md:text-2xl font-light leading-snug group-hover:text-white/80 transition-colors duration-700">
                         {description}
                     </p>
-                    <div className="hidden md:block overflow-hidden">
-                        <span className="text-xl inline-block -translate-x-[150%] group-hover:translate-x-0 transition-transform duration-500 italic font-serif">
-                            View Case Study
-                        </span>
+                    <div className="overflow-hidden">
+                        <motion.span
+                            className="text-2xl inline-block translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.33,1,0.68,1] italic font-display border-b border-white"
+                        >
+                            EXPLORE PROJECT
+                        </motion.span>
                     </div>
                 </div>
             </Link>
