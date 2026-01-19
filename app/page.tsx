@@ -9,6 +9,8 @@ import TextReveal from '@/components/TextReveal';
 import Preloader from '@/components/Preloader';
 import InfiniteMarquee from '@/components/InfiniteMarquee';
 import GrainOverlay from '@/components/GrainOverlay';
+import ScrollTextReveal from '@/components/ScrollTextReveal';
+import AboutSection from '@/components/AboutSection';
 import { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -21,24 +23,28 @@ const PROJECTS = [
     description: 'A futuristic shopping experience built with Next.js, WebGL, and Stripe integration.',
     tags: ['Next.js', 'WebGL', 'Stripe'],
     link: 'https://github.com/visheshnagar7878',
+    image: '/image/ac.png',
   },
   {
     title: 'AI Dashboard',
     description: 'Real-time analytics platform powered by machine learning and socket.io.',
     tags: ['React', 'Python', 'Socket.io'],
     link: 'https://github.com/visheshnagar7878',
+    image: '/image/mc.jpg',
   },
   {
     title: 'Portfolio 2025',
     description: 'Award-winning personal portfolio showcasing creative development skills.',
     tags: ['Three.js', 'GSAP', 'Tailwind'],
     link: 'https://github.com/visheshnagar7878',
+    image: '/image/bc.jpg',
   },
   {
     title: 'Social Connect',
     description: 'Decentralized social media application focused on privacy and ownership.',
     tags: ['Web3', 'Solidity', 'Next.js'],
     link: 'https://github.com/visheshnagar7878',
+    image: '/image/og.png',
   },
 ];
 
@@ -99,6 +105,9 @@ export default function Home() {
           </InfiniteMarquee>
         </section>
 
+        {/* About Section */}
+        <AboutSection />
+
         {/* Selected Works Section */}
         <section id="work" className="relative z-10 px-6 py-32 md:px-20 bg-black">
           <div className="mb-20 border-b border-white/20 pb-8 flex justify-between items-end">
@@ -131,7 +140,7 @@ export default function Home() {
           </div>
           <div className="absolute bottom-8 w-full flex justify-between px-8 text-zinc-600 text-sm uppercase font-display">
             <span>&copy; 2026 Vishesh Nagar</span>
-            <span>Made by Agentic AI</span>
+            <span>FROM HEAVEN TO HORIZON</span>
           </div>
         </section>
 
